@@ -1,4 +1,5 @@
 import React from 'react';
+import { SomeComponent } from './components/SomeComponent';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { ApplicationForm } from './components/ApplicationForm';
