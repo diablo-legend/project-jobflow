@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { ApplicationForm } from './components/ApplicationForm';
@@ -7,14 +7,15 @@ import { sendToTelegram } from './utils/telegram';
 import type { FormData } from './types';
 
 function App() {
-  const formRef = useRef<HTMLDivElement>(null);
+  const formRef = React.useRef<HTMLDivElement>(null);
 
   const scrollToForm = () => {
     formRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleSubmit = async (data: FormData) => {
-    const message = `
+    try {
+      const message = `
 <b>Новая заявка на работу:</b>
 
 <b>Имя:</b> ${data.name}
@@ -31,7 +32,11 @@ ${data.experience}
 ${data.files.map(file => `- ${file.name}`).join('\n')}
 `;
 
-    await sendToTelegram(message, data.files);
+      await sendToTelegram(message, data.files);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      throw error;
+    }
   };
 
   return (
@@ -52,5 +57,3 @@ ${data.files.map(file => `- ${file.name}`).join('\n')}
     </div>
   );
 }
-
-export default App;
